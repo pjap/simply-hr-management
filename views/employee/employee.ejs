@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/css/index.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/stylesheets/js/index.js"></script>
+    <title>EMPLOYEE PAGE</title>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <h2 class="text-center"><strong>Table Employee</strong></h2>
+      <div class="text-center">
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addModal">
+          <i class="fa fa-user-plus"> Add New Employee</i>
+        </button>
+      </div>
+      <br>
+      <table class="table table-hover table-stripped table-sm">
+        <thead>
+          <tr>
+            <th>FOTO</th>
+            <th>ID</th>
+            <th>FULLNAME</th>
+            <!-- <th>FIRST NAME</th>
+            <th>LAST NAME</th> -->
+            <th>EMAIL</th>
+            <th>ADDRESS</th>
+            <th>PHONE</th>
+            <th>GENDER</th>
+            <th colspan="2" class="text-center">OPTIONS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% dataEmployee.forEach(rows => { %>
+            <tr>
+              <td>
+                <img src="/images/employees/<%= rows.foto %>" alt="Belum Ada Foto" width="90px;" height="50px;">
+              </td>
+              <td><%= rows.id %></td>
+              <td><%= rows.first_name %> <%= rows.last_name %></td>
+              <!-- <td><%= rows.first_name %></td>
+              <td><%= rows.last_name %></td> -->
+              <td><%= rows.email %></td>
+              <td><%= rows.address %></td>
+              <td><%= rows.phone %></td>
+              <td><%= rows.gender %></td>
+              <td>
+                <a href="/employee/uploadfoto/<%= rows.id %>">
+                  <button type="button" class="btn btn-primary btn-sm">
+                    <i class="fa fa-camera"> Upload Foto</i>
+                  </button>
+                </a>
+              </td>
+              <td>
+                <a href="/employee/edit/<%= rows.id %>">
+                  <button type="button" class="btn btn-primary btn-sm">
+                    <i class="fa fa-pencil"> Edit</i>
+                  </button>
+                </a>
+              </td>
+              <td>
+                <a href="/employee/delete/<%= rows.id %>">
+                  <button type="button" class="btn btn-primary btn-sm">
+                    <i class="fa fa-trash"> Delete</i>
+                  </button>
+                </a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+        </tbody>
+      </table>
+
+      <!-- START OF MODAL ( FOR SMALL / LARGE JUST + modal-sm / modal-lg) -->
+
+      <!-- ADD MODAL -->
+      <div class="modal fade" id="addModal" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"><i class="fa fa-remove"></i></button>
+              <!-- &times; -->
+              <h4 class="modal-title">Form Add New Employee</h4>
+            </div>
+            <!-- ACTION POST  WHEN SUBMIT-->
+            <form class="" action="/employee/add" method="post">
+            <div class="modal-body">
+              <div class="form-group">
+                <input class="form-control" type="text" name="first_name" placeholder="Input Nama Depan" required>
+              </div>
+              <div class="form-group">
+                <input class="form-control" type="text" name="last_name" placeholder="Input Nama Belakang" required>
+              </div>
+              <div class="form-group">
+                  <input class="form-control" type="email" name="email" placeholder="Input Nama Email ( Example : test@gmail.com)" required>
+              </div>
+              <div class="form-group">
+                  <input class="form-control" type="text" name="address" placeholder="Input Alamat" required>
+              </div>
+              <div class="form-group">
+                  <input class="form-control" type="text" name="phone" placeholder="Input Nomor Telfon" required>
+              </div>
+              <div class="form-group">
+                <label for="gender">Choose Gender :</label>
+                <select class="form-control" name="gender">
+                  <option value="Pria">Pria</option>
+                  <option value="Wanita">Wanita</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary btn-lg" style="width:100%;"><i class="fa fa-plus"> Add Teacher</i></button>
+            </div>
+            </form>
+            <!-- END OF ACTION POST WHEN SUBMIT -->
+          </div>
+        </div>
+      </div>
+      <!-- ADD MODAL -->
+
+        <!-- END OF MODAL -->
+    </div>
+  </body>
+</html>
