@@ -9,13 +9,13 @@ module.exports = function(sequelize, DataTypes) {
     gender: DataTypes.STRING,
     foto: DataTypes.STRING,
     createdAt: new Date,
-    updatedAt: new Date
-  }, {
-    classMethods: {
-      associate: function(models) {
-        // associations can be defined here
-      }
-    }
-  });
+    updatedAt: new Date,
+    JobPositionId: DataTypes.INTEGER
+  })
+  Employee.associate = function(models) {
+    Employee.belongsTo(models.JobPosition, {foreignKey: 'JobPositionId'})
+    Employee.hasMany(models.Attendance, {foreignKey: 'EmployeeId'})
+    Employee.belongsToMany(models.Rule, {through: 'Absence'})
+  }
   return Employee;
 };

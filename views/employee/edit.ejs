@@ -46,6 +46,14 @@
             </select>
           </div>
           <div class="form-group">
+            <label for="gender">Choose Position :</label>
+              <select class="form-control" name="JobPositionId">
+                <% dataJobPosition.forEach(rows => { %>
+                <option value="<%= rows.id %>"><%= rows.name_position %></option>
+                <% }) %>
+              </select>
+          </div>
+          <div class="form-group">
             <button type="submit" class="btn btn-primary btn-lg" style="width:100%;"><i class="fa fa-check"> Update Employee</i></button>
           </div>
         </form>

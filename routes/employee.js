@@ -13,18 +13,53 @@ const upload = multer({ dest: 'public/images/employees' })
 //   }
 // })
 //
+
+// router.get('/', function(req,res ) {
+//   Model.Employee.findAll({
+//     order: [['id','ASC']]
+//   })
+//   .then(dataEmployee => {
+//     res.render('employee/employee', {dataEmployee: dataEmployee, session: req.session})
+//   })
+//   .catch(err => {
+//     res.send(err)
+//   })
+// })
+
 router.get('/', function(req,res ) {
   Model.Employee.findAll({
-    order: [['id','ASC']]
+    order: [['id', 'ASC']]
   })
   .then(dataEmployee => {
-    res.render('employee/employee', {dataEmployee: dataEmployee, session: req.session})
+    let promise = dataEmployee.map((employee) => {
+      return new Promise((resolve,reject) => {
+        employee.getJobPosition()
+         .then(jobposition => {
+           console.log('ini data jobposition', jobposition);
+           if(jobposition) {
+             employee.name_position = jobposition.name_position;
+           } else {
+             employee.name_position = '-- unassigned --';
+           }
+           resolve(employee);
+         })
+         .catch(err => {
+           reject(err)
+         })
+      })
+    })
+
+    Promise.all(promise)
+     .then(fixDataEmployee => {
+      //  res.send(fixDataEmployee)
+      res.render('employee/employee', {fixDataEmployee: fixDataEmployee, session: req.session})
+     })
   })
   .catch(err => {
     res.send(err)
   })
 })
-//
+
 router.get('/add', function(req,res) {
   res.render('employee/add', {dataError: null, session: req.session})
 })
@@ -34,10 +69,11 @@ router.post('/add', function(req,res) {
     first_name: req.body.first_name,
     last_name: req.body.last_name,
     email: req.body.email,
-    address: req.body.email,
-    phone: req.body.email,
+    address: req.body.address,
+    phone: req.body.phone,
     gender: req.body.gender,
-    foto: req.body.foto
+    foto: req.body.foto,
+    JobPositionId: req.body.JobPositionId
   })
   .then(() => {
     res.redirect('/employee')
@@ -69,7 +105,10 @@ router.get('/delete/:id', function(req,res) {
 router.get('/edit/:id', function(req,res) {
   Model.Employee.findById(req.params.id)
   .then(dataEmployee => {
-    res.render('employee/edit', { dataEmployee: dataEmployee, dataError: null, session: req.session })
+    Model.JobPosition.findAll()
+    .then(dataJobPosition => {
+      res.render('employee/edit', { dataJobPosition: dataJobPosition ,dataEmployee: dataEmployee, dataError: null, session: req.session })
+    })
   })
   .catch(err => {
     res.send(err)
@@ -81,10 +120,11 @@ router.post('/edit/:id', function(req,res) {
     first_name: req.body.first_name,
     last_name: req.body.last_name,
     email: req.body.email,
-    address: req.body.email,
-    phone: req.body.email,
+    address: req.body.address,
+    phone: req.body.phone,
     gender: req.body.gender,
-    foto: req.body.foto
+    foto: req.body.foto,
+    JobPositionId: req.body.JobPositionId
   },{
     where: {
       id: req.params.id
@@ -118,8 +158,8 @@ router.post('/uploadfoto/:id',upload.any() , function(req,res) {
     first_name: req.body.first_name,
     last_name: req.body.last_name,
     email: req.body.email,
-    address: req.body.email,
-    phone: req.body.email,
+    address: req.body.address,
+    phone: req.body.phone,
     gender: req.body.gender,
     foto: req.files[0].filename
   },{

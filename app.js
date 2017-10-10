@@ -15,6 +15,7 @@ var signup = require('./routes/signup')
 var employee = require('./routes/employee')
 var jobposition = require('./routes/jobposition')
 var rule = require('./routes/rule')
+var absence = require('./routes/absence')
 var app = express();
 
 // view engine setup
@@ -43,6 +44,7 @@ app.use('/signup', signup)
 app.use('/employee',employee)
 app.use('/jobposition',jobposition)
 app.use('/rule',rule)
+app.use('/absence',absence)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

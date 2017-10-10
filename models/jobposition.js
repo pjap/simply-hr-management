@@ -5,12 +5,10 @@ module.exports = function(sequelize, DataTypes) {
     salary: DataTypes.INTEGER,
     createdAt: new Date,
     updatedAt: new Date
-  }, {
-    classMethods: {
-      associate: function(models) {
-        // associations can be defined here
-      }
-    }
-  });
+  })
+  JobPosition.associate = function(models) {
+    JobPosition.hasMany(models.Employee, {foreignKey:"JobPositionId"})
+    JobPosition.hasMany(models.Attendance, {foreignKey: 'JobPositionId'})
+  }
   return JobPosition;
 };
