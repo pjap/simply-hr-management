@@ -6,7 +6,6 @@ module.exports = function(sequelize, DataTypes) {
     createdAt: new Date,
     updatedAt: new Date
   }, {
-
   });
   return Rule;
 };
