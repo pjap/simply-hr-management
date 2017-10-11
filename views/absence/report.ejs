@@ -15,29 +15,64 @@
     </style>
   </head>
   <body>
-    <div class="container-fluid">
-      <div class="table table-striped">
+    <div class="container">
+      <h2 class="text-center"><strong>Table Report Payment</strong></h2>
+      <form class="" action="/absence" method="post">
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="dateofbirth">Date: </label>
+            <input class="form-control" type="date" name="date">
+        </div>
+        <div class="form-group">
+          <label>Select Employee :</label>
+            <select class="form-control" name="EmployeeId">
+              <% dataEmployee.forEach(rows => { %>
+              <option value="<%= rows.id %>"><%= rows.first_name %> <%= rows.last_name %></option>
+              <% }) %>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm" style="width:20%;"><i class="fa fa-plus"> Cari </i></button>
+      </form>
+      <br><br><br>
+      <table class="table table-responsive table-striped table-hover">
         <thead>
           <tr>
             <th>ID</th>
-            <th>EMPLOYEE NAME</th>
             <th>DATE</th>
-            <th>SALARY</th>
-            <th>DEDUCTION</th>
-            <th>TOTAL SALARY</th>
+            <th>Employee Name</th>
+            <th>Salary</th>
+            <th>Deduction</th>
+            <th>Total</th>
+            <th colspan="2" class="text-center">OPTIONS</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
+          <% dataAbsence.forEach(rows => { %>
+            <tr>
+              <td><%= rows.id %></td>
+              <td><%= rows.date %></td>
+              <td><%= rows.Employee.first_name %> <%= rows.Employee.last_name %></td>
+              <td><%= rows.JobPosition.salary %></td>
+              <td><%= rows.Rule.deduction %></td>
+              <td>TOTAL GAJI</td>
+              <td>
+                <a href="/absence/edit/<%= rows.id %>">
+                  <button type="button" class="btn btn-primary btn-sm">
+                    <i class="fa fa-pencil"> Edit</i>
+                  </button>
+                </a>
+              </td>
+              <td>
+                <a href="/absence/delete/<%= rows.id %>">
+                  <button type="button" class="btn btn-primary btn-sm">
+                    <i class="fa fa-trash"> Delete</i>
+                  </button>
+                </a>
+              </td>
+            </tr>
+          <% }) %>
         </tbody>
-      </div>
+      </table>
     </div>
   </body>
 </html>

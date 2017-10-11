@@ -25,7 +25,7 @@ router.get('/', function(req,res) {
   })
 })
 
-router.post('/add',(req,res)=>{
+router.post('/',(req,res)=>{
   Model.Absence.findOne({
     where : {
       date: req.body.date,
@@ -48,7 +48,8 @@ router.post('/add',(req,res)=>{
             .then(dataJobPosition => {
               // console.log(dataAbsence);
               // res.send(dataAbsence)
-              res.redirect('/absence')
+              // res.redirect('/absence')
+              res.render('absence/absence', {dataEmployee: dataEmployee, dataAbsence:dataAbsence,dataRule: dataRule,dataJobPosition:dataJobPosition, dataError: 'ID SUDAH DI GUNAKAN'})
             })
           })
         })
@@ -117,7 +118,11 @@ router.get('/report', function(req,res) {
     include: [Model.Employee, Model.Rule, Model.JobPosition]
   })
   .then(dataAbsence => {
-    res.send(dataAbsence)
+    Model.Employee.findAll()
+    .then(dataEmployee => {
+      res.render('absence/report', {dataAbsence: dataAbsence, dataEmployee: dataEmployee})
+      // res.send(dataAbsence)
+    })
   })
   .catch(err => {
     res.send(err)
