@@ -2,29 +2,50 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta charset="utf-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="/stylesheets/css/index.css">
     <link rel="stylesheet" href="/stylesheets/css/datepicker.css">
+    <link rel="stylesheet" type="text/css" href="/dist/bootstrap-clockpicker.min.css">
+    <link rel="stylesheet" type="text/css" href="/dist/jquery-clockpicker.min.css">
+    <link rel="stylesheet" type="text/css" href="/dist/github.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/stylesheets/js/index.js"></script>
     <style media="screen">
     .table-striped>tbody>tr:nth-child(odd)>td,
 .table-striped>tbody>tr:nth-child(odd)>th {
  background-color: #efeded
 }
     </style>
+    <style media="screen">
+    .clockpicker-popover {
+      z-index: 999999 !important;
+    }
+    </style>
     <title>ABSENCE PAGE</title>
   </head>
   <body>
+
     <div class="container-fluid">
+      <% if (dataError) { %>
+        <div class="alert alert-danger alert-dismissable">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+          <strong>Awas!</strong> ID INI SUDAH ABSEN HARI INI
+        </div>
+      <% } %>
+
       <h2 class="text-center"><strong>Table Absence</strong></h2>
       <div class="text-center">
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addModal">
+        <button type="button" class="btn btn-primary btn-sm" id="modalAbsence">
           <i class="fa fa-user-plus"> Add New Absence</i>
         </button>
+      </div>
+      <div class="text-left">
+        <a href="/absence/report">
+        <button type="button" class="btn btn-primary">
+        <i class="fa fa-book"> VIEW REPORT</i>
+        </button>
+        </a>
       </div>
       <br>
       <table class="table table-responsive table-striped table-hover">
@@ -32,24 +53,29 @@
           <tr>
             <th>ID</th>
             <th>Date</th>
-            <th>Check In</th>
-            <th>Check Out</th>
             <th>Employee Name</th>
             <th>Keterangan Rule</th>
+            <th>Check In</th>
+            <th>Check Out</th>
             <th>Position</th>
             <th colspan="2" class="text-center">OPTIONS</th>
           </tr>
         </thead>
         <tbody>
-          <% dataAbsence.forEach((rows,index) => { %>
+          <% dataAbsence.forEach(rows => { %>
             <tr>
-              <td><%= index+=1 %></td>
+              <td><%= rows.id %></td>
+              <td><%= rows.Employee.first_name %> <%= rows.Employee.last_name %></td>
+              <td><%= rows.Rule.ket_rules %></td>
               <td><%= rows.date %></td>
-              <td><%= rows.checkin %></td>
-              <td><%= rows.checkout %></td>
-              <td><%= rows.EmployeeId %></td>
-              <td><%= rows.RuleId %></td>
-              <td><%= rows.JobPositionId %></td>
+              <% if (rows.Rule.ket_rules == 'Sakit' || rows.Rule.ket_rules == 'Izin' || rows.Rule.ket_rules == 'Cuti') { %>
+                <td>Tidak Hadir</td>
+                <td>Tidak Hadir</td>
+              <% } else { %>
+                <td><%= rows.checkin %></td>
+                <td><%= rows.checkout %></td>
+              <% } %>
+              <td><%= rows.JobPosition.name_position %></td>
               <td>
                 <a href="/absence/edit/<%= rows.id %>">
                   <button type="button" class="btn btn-primary btn-sm">
@@ -84,22 +110,59 @@
             <!-- ACTION POST  WHEN SUBMIT-->
             <form class="" action="/absence/add" method="post">
             <div class="modal-body">
-              <label for="dateofbirth">Date: </label>
-                <input type="date" name="date" id="date">
               <div class="form-group">
-                <input class="form-control" type="text" name="checkin" placeholder="Cek In" required>
+                <label for="dateofbirth">Date: </label>
+                  <input class="form-control" type="date" name="date">
               </div>
               <div class="form-group">
-                  <input class="form-control" type="text" name="checkout" placeholder="Cek Out" required>
+                <label>Select Employee :</label>
+                  <select class="form-control" name="EmployeeId">
+                    <% dataEmployee.forEach(rows => { %>
+                    <option value="<%= rows.id %>"><%= rows.first_name %> <%= rows.last_name %></option>
+                    <% }) %>
+                  </select>
               </div>
               <div class="form-group">
-                  <input class="form-control" type="text" name="EmployeeId" placeholder="Name Employee" required>
-              </div>
+                  <label>Select Rule :</label>
+                    <select class="form-control" name="RuleId">
+                      <% dataRule.forEach(rows => { %>
+                      <option value="<%= rows.id %>"><%= rows.ket_rules %></option>
+                      <% }) %>
+                    </select>
+                </div>
+              <!-- TIME PICKER -->
               <div class="form-group">
-                  <input class="form-control" type="text" name="RuleId" placeholder="Rules Name" required>
-              </div>
+                <label for="dateofbirth">Check In : </label>
+            		<div class="clearfix">
+                  <div class="input-group">
+                    <input type="text" class="form-control clockpicker-modal" name="checkin" value="09:00">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                  </div>
+            		</div>
+              <!-- TIME PICKER -->
+              <br>
+              <!-- TIME PICKER -->
               <div class="form-group">
-                  <input class="form-control" type="text" name="JobPositionId" placeholder="Position" required>
+                <label for="dateofbirth">Check Out : </label>
+            		<div class="clearfix">
+                  <div class="input-group">
+                    <input type="text" class="form-control clockpicker-modal" name="checkout" value="18:00">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                  </div>
+            		</div>
+                <br>
+              <!-- TIME PICKER -->
+              <div class="form-group">
+                <label>Select Position :</label>
+                  <select class="form-control" name="JobPositionId">
+                    <% dataJobPosition.forEach(rows => { %>
+                    <option value="<%= rows.id %>"><%= rows.name_position %></option>
+                    <% }) %>
+                  </select>
               </div>
             </div>
             <div class="modal-footer">
@@ -114,5 +177,22 @@
 
         <!-- END OF MODAL -->
     </div>
+
   </body>
+  <script type="text/javascript" src="dist/bootstrap-clockpicker.min.js"></script>
+  <script type="text/javascript">
+  console.log('hahahaha');
+  $('.clockpicker').clockpicker(function() {
+    $(this).change(e => console.log(e))
+  })
+  $('#modalAbsence').click(function() {
+    $('#addModal').modal('show');
+  })
+  $('#addModal').on('shown.bs.modal', function() {
+    console.log('lol');
+    $('.clockpicker-modal').clockpicker({
+      autoclose: true
+    })
+  })
+  </script>
 </html>
