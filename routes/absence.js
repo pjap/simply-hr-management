@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const Model = require('../models')
+const sequelize = require("sequelize");
+const matauang = require('../helper/formatuang')
 
 
 router.get('/', function(req,res) {
@@ -112,25 +114,64 @@ router.get('/edit/:id', function(req,res) {
 })
 
 router.get('/report', function(req,res) {
-  Model.Absence.findAll({
-    attributes: [['id','id'],['date','date'],['checkin','checkin'],['checkout','checkout'],['EmployeeId','EmployeeId'],
-                  ['RuleId','RuleId'],['JobPositionId','JobPositionId']],
-    include: [Model.Employee, Model.Rule, Model.JobPosition]
-  })
-  .then(dataAbsence => {
+  let query = `SELECT
+     A.bulan_tahun,
+     A.id,
+     A.name,
+     A.deduction,
+     "JobPositions"."salary" as salary,
+     ("JobPositions"."salary" - A.deduction) as thp
+  FROM
+  (SELECT
+    "Employees"."id" as id,
+    max("Employees"."JobPositionId") as jobId,
+    max("Employees"."first_name") as name,
+    SUM("Rules"."deduction") as deduction,
+    substring("Absences"."date",1,7) as bulan_tahun
+  FROM "Employees", "Absences"
+  LEFT JOIN "Rules" ON "Absences"."RuleId" = "Rules"."id"
+  WHERE "Employees"."id" = "Absences"."EmployeeId"
+  GROUP BY "Employees"."id", bulan_tahun
+  ORDER BY bulan_tahun, "Employees"."id") AS A
+  LEFT JOIN "JobPositions" ON "JobPositions"."id" = A.jobId`;
+  Model.sequelize.query(query, {type: sequelize.QueryTypes.SELECT})
+  .then(dataReport => {
     Model.Employee.findAll()
     .then(dataEmployee => {
-      res.render('absence/report', {dataAbsence: dataAbsence, dataEmployee: dataEmployee})
-      // res.send(dataAbsence)
+      // res.send(dataReport)
+      res.render('absence/report', {dataReport:dataReport, dataEmployee:dataEmployee, matauang:matauang})
     })
-  })
-  .catch(err => {
-    res.send(err)
   })
 })
 
-
-
-
+router.post('/report', function(req,res) {
+  let query = `SELECT
+     A.bulan_tahun,
+     A.id,
+     A.name,
+     A.deduction,
+     "JobPositions"."salary" as salary,
+     ("JobPositions"."salary" - A.deduction) as thp
+  FROM
+  (SELECT
+    "Employees"."id" as id,
+    max("Employees"."JobPositionId") as jobId,
+    max("Employees"."first_name") as name,
+    SUM("Rules"."deduction") as deduction,
+    substring("Absences"."date",1,7) as bulan_tahun
+  FROM "Employees", "Absences"
+  LEFT JOIN "Rules" ON "Absences"."RuleId" = "Rules"."id"
+  WHERE "Employees"."id" = "Absences"."EmployeeId"
+  AND "Employees"."id" = '${req.body.EmployeeId}'
+  GROUP BY "Employees"."id", bulan_tahun
+  ORDER BY bulan_tahun, "Employees"."id") AS A
+  LEFT JOIN "JobPositions" ON "JobPositions"."id" = A.jobId`;
+  Model.sequelize.query(query, {type: sequelize.QueryTypes.SELECT})
+  .then((dataReport2) => {
+    console.log('MASUK ENGGA', query);
+    res.render('absence/resultbyid', {dataReportId: dataReport2, matauang:matauang})
+    // res.redirect('/absence/report')
+  })
+})
 
 module.exports = router

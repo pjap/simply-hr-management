@@ -2,13 +2,13 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <!-- <link rel="stylesheet" href="/stylesheets/css/datepicker.css"> -->
-    <!-- <link rel="stylesheet" href="/src/jquery-ui.css"> --> -->
+    <link rel="stylesheet" href="/stylesheets/css/datepicker.css">
+    <link rel="stylesheet" href="/src/jquery-ui.css">
 
     <!-- YY MM -->
-    <link href="/YM/demo/stylesheets/stylesheet.css" rel="stylesheet" type="text/css" />
+    <!-- <link href="/YM/demo/stylesheets/stylesheet.css" rel="stylesheet" type="text/css" />
     <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css" />
 
     <link href="/YM/demo/MonthPicker.min.css" rel="stylesheet" type="text/css" />
@@ -19,12 +19,12 @@
     <script src="https://cdn.rawgit.com/digitalBush/jquery.maskedinput/1.4.1/dist/jquery.maskedinput.min.js"></script>
 
     <script src="/YM/demo/MonthPicker.min.js"></script>
-    <script src="/YM/demo/examples.js"></script>
+    <script src="/YM/demo/examples.js"></script> -->
     <!-- YY MM -->
 
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <!-- <script src="/src/jquery-ui.js"></script> -->
+    <script src="/src/jquery-ui.js"></script>
     <title>Halaman Report</title>
     <style media="screen">
     .table-striped>tbody>tr:nth-child(odd)>td,
@@ -35,29 +35,7 @@
   </head>
   <body>
     <div class="container">
-      <!-- <h2 class="text-center success">Table Report Payment</h2> -->
-      <form class="" action="/absence/report" method="post">
-      <div class="modal-body">
-        <h2 class="text-center success">Table Report Payment</h2>
-        <!-- <div class="form-group">
-          <label for="dateofbirth">Date: </label>
-            <input class="form-control" type="date" name="date">
-        </div> -->
-        <!-- <div class="form-group">
-          <label for="date2">Date : </label>
-          <input id="Html5" type="month" class="form-control" name="date" />
-        </div> -->
-        <div class="form-group">
-          <label>Select Employee :</label>
-            <select class="form-control" name="EmployeeId">
-              <% dataEmployee.forEach(rows => { %>
-              <option value="<%= rows.id %>"><%= rows.first_name %> <%= rows.last_name %></option>
-              <% }) %>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary btn-sm" style="width:20%;"><i class="fa fa-plus"> Cari </i></button>
-      </form>
-      <br><br><br>
+      <h2 class="text-center success">Table Report Payment</h2>
       <table class="table table-responsive table-striped table-hover">
         <thead>
           <tr>
@@ -70,7 +48,7 @@
           </tr>
         </thead>
         <tbody>
-          <% dataReport.forEach(rows => { %>
+          <% dataReportId.forEach(rows => { %>
             <tr>
               <td><%= rows.bulan_tahun %></td>
               <td><%= rows.id %></td>
