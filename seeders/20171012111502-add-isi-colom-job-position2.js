@@ -12,9 +12,33 @@ module.exports = {
         isBetaMember: false
       }], {});
     */
-    return queryInterface.bulkInsert('Rules',[{
-      ket_rules: 'Sakit',
-      deduction: 150000,
+    return queryInterface.bulkInsert('JobPositions',[{
+      name_position: 'HRD',
+      salary: 6000000,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      name_position: 'Manager',
+      salary: 9000000,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      name_position: 'Direktur',
+      salary: 15000000,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      name_position: 'OB',
+      salary: 1000000,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      name_position: 'Staff',
+      salary: 500000,
       createdAt: new Date(),
       updatedAt: new Date()
     }

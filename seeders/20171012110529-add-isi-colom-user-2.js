@@ -12,13 +12,14 @@ module.exports = {
         isBetaMember: false
       }], {});
     */
-    return queryInterface.bulkInsert('Rules',[{
-      ket_rules: 'Sakit',
-      deduction: 150000,
+    return queryInterface.bulkInsert('Users',[{
+      username: 'hary',
+      password: 'hary',
+      role: 'admin',
+      salt: '',
       createdAt: new Date(),
       updatedAt: new Date()
-    }
-  ])
+    }])
   },
 
   down: function (queryInterface, Sequelize) {
