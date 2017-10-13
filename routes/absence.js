@@ -168,9 +168,12 @@ router.post('/report', function(req,res) {
   LEFT JOIN "JobPositions" ON "JobPositions"."id" = A.jobId`;
   Model.sequelize.query(query, {type: sequelize.QueryTypes.SELECT})
   .then((dataReport2) => {
-    console.log('MASUK ENGGA', query);
-    res.render('absence/resultbyid', {dataReportId: dataReport2, matauang:matauang})
-    // res.redirect('/absence/report')
+    Model.Employee.findAll()
+    .then(dataEmployee => {
+      console.log('MASUK ENGGA', query);
+      res.render('absence/resultbyid', {dataReportId: dataReport2, dataEmployee:dataEmployee ,matauang:matauang})
+      // res.redirect('/absence/report')
+    })
   })
 })
 
