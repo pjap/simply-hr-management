@@ -3,6 +3,7 @@ const router = express.Router()
 const Model = require('../models')
 const sequelize = require("sequelize");
 const matauang = require('../helper/formatuang')
+const nodemailer = require('nodemailer')
 
 
 router.get('/', function(req,res) {
@@ -171,6 +172,37 @@ router.post('/report', function(req,res) {
     Model.Employee.findAll()
     .then(dataEmployee => {
       console.log('MASUK ENGGA', query);
+      // EMAIL
+
+      var smtpTransport = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false, // use SSL
+    auth: {
+        user: "harynugrahaputra@gmail.com",
+        pass: "putra2910"
+    }
+ });
+
+ // setup e-mail data with unicode symbols
+ var mailOptions = {
+    from: "harynugrahaputra@gmail.com", // sender address
+    to: "harynugrahaputra@gmail.com", // list of receivers
+    subject: "HALLO", // Subject line
+    text: "Hello world ", // plaintext body
+    html: "HALO HARI KAMU DI PECAT!!!" // html body
+ }
+
+ // send mail with defined transport object
+ smtpTransport.sendMail(mailOptions, function(error, message){
+    if(error){
+        console.log(error);
+    } else{
+        console.log("Message sent: " + message.response);
+    }
+   })
+
+      //
       res.render('absence/resultbyid', {dataReportId: dataReport2, dataEmployee:dataEmployee ,matauang:matauang})
       // res.redirect('/absence/report')
     })

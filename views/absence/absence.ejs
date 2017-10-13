@@ -6,11 +6,13 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="/stylesheets/css/index.css">
     <link rel="stylesheet" href="/stylesheets/css/datepicker.css">
+    <link rel="stylesheet" href="/stylesheets/index.css">
     <link rel="stylesheet" type="text/css" href="/dist/bootstrap-clockpicker.min.css">
     <link rel="stylesheet" type="text/css" href="/dist/jquery-clockpicker.min.css">
     <link rel="stylesheet" type="text/css" href="/dist/github.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/stylesheets/index.js"></script>
     <style media="screen">
     .table-striped>tbody>tr:nth-child(odd)>td,
 .table-striped>tbody>tr:nth-child(odd)>th {
@@ -25,6 +27,43 @@
     <title>ABSENCE PAGE</title>
   </head>
   <body>
+    <div id="wrapper">
+      <div class="overlay"></div>
+
+    <!-- Sidebar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
+        <ul class="nav sidebar-nav">
+            <li class="sidebar-brand">
+                <a href="#">
+                   Hacktiv8 HRM
+                </a>
+            </li>
+            <li>
+                <a href="#">@COMPANY</a>
+            </li>
+              <li><a href="/index">Homepage</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Menu Utama<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li class="dropdown-header"></li>
+                  <li><a href="/employee">List Employee</a></li>
+                  <li><a href="/rule">List Of Rule</a></li>
+                  <li><a href="/jobposition">List Job Position</a></li>
+                  <li><a href="/absence">Input Absence</a></li>
+                </ul>
+              </li>
+              <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <button type="button" class="hamburger is-closed" data-toggle="offcanvas">
+            <span class="hamb-top"></span>
+            <span class="hamb-middle"></span>
+            <span class="hamb-bottom"></span>
+        </button>
 
     <div class="container-fluid">
       <% if (dataError) { %>
@@ -176,6 +215,8 @@
 
         <!-- END OF MODAL -->
     </div>
+  </div>
+</div>
 
   </body>
   <script type="text/javascript" src="dist/bootstrap-clockpicker.min.js"></script>
